@@ -1,0 +1,41 @@
+ Sub log_simpan() 'untuk menyimpan log aktifitas
+        'on error resume next
+        Try
+            Call koneksi()
+            Dim simpanlog As String = "insert into log_aktivitas values ('""', '" & menu_utama.Panel1.Text & "','User Simpan','" & Format(DateValue(Today), "yyyy-MM-dd") & "','" & menu_utama.lbljam.Text & "')"
+            Console.WriteLine(simpanlog)
+            cmd = New OdbcCommand(simpanlog, conn)
+            cmd.ExecuteNonQuery()
+        Catch ex As Exception
+            MsgBox(ex.Message)
+        End Try
+    End Sub
+    Sub log_edit() 'untuk mengedit log aktifitas
+        'on error resume next
+        Try
+            Call koneksi()
+            Dim simpanlog As String = "insert into log_aktivitas values ('""', '" & menu_utama.Panel1.Text & "','User Edit','" & Format(DateValue(Today), "yyyy-MM-dd") & "','" & menu_utama.lbljam.Text & "')"
+            Console.WriteLine(simpanlog)
+            cmd = New OdbcCommand(simpanlog, conn)
+            cmd.ExecuteNonQuery()
+        Catch ex As Exception
+            MsgBox(ex.Message)
+        End Try
+    End Sub
+
+    Sub log_hapus() 'untuk log aktifitas
+        'on error resume next
+        Try
+            Call koneksi()
+            Dim simpanlog As String = "insert into log_aktivitas values ('""', '" & menu_utama.Panel1.Text & "','User Hapus','" & Format(DateValue(Today), "yyyy-MM-dd") & "','" & menu_utama.lbljam.Text & "')"
+            Console.WriteLine(simpanlog)
+            cmd = New OdbcCommand(simpanlog, conn)
+            cmd.ExecuteNonQuery()
+        Catch ex As Exception
+            MsgBox(ex.Message)
+        End Try
+    End Sub
+    Private Sub TextBox5_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles TextBox5.TextChanged
+        caridata()
+    End Sub
+End Class
