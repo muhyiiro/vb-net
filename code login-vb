@@ -1,0 +1,142 @@
+Imports System.Data.Odbc
+Public Class login
+
+    Private Sub Label1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
+
+    End Sub
+    'kodingan variable
+
+    Dim dicoba As string
+
+    'kodingan sub
+
+    Sub hapus()
+        TextBox1.Clear()
+        TextBox1.Focus()
+        TextBox2.Clear()
+        ComboBox1.Text = "Peminjam"
+    End Sub
+
+    Private Sub Button2_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button2.Click
+        Me.Close()
+    End Sub
+
+    Private Sub Timer1_Tick(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Timer1.Tick
+        lbljam.Text = Format(TimeOfDay)
+    End Sub
+
+    Private Sub lbltanggal_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles lbltanggal.Click
+
+    End Sub
+
+    Private Sub login_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
+        lbltanggal.Text = Format(Today)
+    End Sub
+
+    Private Sub TextBox1_KeyPress(ByVal sender As Object, ByVal e As System.Windows.Forms.KeyPressEventArgs) Handles TextBox1.KeyPress
+        'jika selesai input turun ke bawah
+        If e.KeyChar = Chr(13) Then
+            e.Handled = True
+            TextBox2.Focus()
+        End If
+    End Sub
+
+    Private Sub TextBox1_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles TextBox1.TextChanged
+
+    End Sub
+
+    Private Sub TextBox2_KeyPress(ByVal sender As Object, ByVal e As System.Windows.Forms.KeyPressEventArgs) Handles TextBox2.KeyPress
+        'batasi jumlah inputan
+        TextBox2.MaxLength = 8
+
+        'jika selesai input turun ke bawah
+        If e.KeyChar = Chr(13) Then
+            e.Handled = True
+            ComboBox1.Focus()
+        End If
+    End Sub
+
+    Private Sub TextBox2_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles TextBox2.TextChanged
+
+    End Sub
+
+    Private Sub mata1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles mata1.Click
+        mata1.Visible = False
+        mata2.Visible = True
+        TextBox2.PasswordChar = ControlChars.NullChar
+    End Sub
+
+    Private Sub mata2_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles mata2.Click
+        mata2.Visible = False
+        mata1.Visible = True
+        TextBox2.PasswordChar = "●"
+    End Sub
+
+    Private Sub ComboBox1_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ComboBox1.SelectedIndexChanged
+   
+    End Sub
+
+    Private Sub Button1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button1.Click
+        If TextBox1.Text = "" Or TextBox2.Text = "" Or ComboBox1.Text = "" Then
+            MsgBox("Harap isi semua data!!", MsgBoxStyle.Information, "Informasi")
+        Else
+            Call koneksi()
+            cmd = New OdbcCommand("select * from user where user_id='" & TextBox1.Text & "' and password='" & TextBox2.Text & "' and status='" & ComboBox1.Text & "'", conn)
+            dr = cmd.ExecuteReader
+            dr.Read()
+
+            If Not dr.HasRows Then
+                cmd = New OdbcCommand("select * from user where username='" & TextBox1.Text & "' and password='" & TextBox2.Text & "' and status='" & ComboBox1.Text & "'", conn)
+                dr = cmd.ExecuteReader
+                dr.Read()
+
+                If Not dr.HasRows Then
+                    dicoba = dicoba + 1
+                    MsgBox("Login Gagal")
+                    TextBox2.Focus()
+                    If dicoba > 2 Then
+                        Call hapus()
+                        MsgBox("Percobaan Login Telah Gagal Lebih Dari 3 Kali, Silahkan Coba Lagi", MsgBoxStyle.Critical, "Peringatan")
+                    End If
+                    Exit Sub
+                End If
+            End If
+            Me.Visible = False
+            menu_utama.Show()
+            menu_utama.Label3.Text = Format("Nama   : " & dr("nama_lengkap"))
+            menu_utama.Label7.Text = Format("Status : " & dr("status"))
+
+            menu_utama.ToolStripStatusLabel3.Text = dr("user_id")
+            menu_utama.ToolStripStatusLabel2.Text = dr("nama_lengkap")
+            menu_utama.ToolStripStatusLabel1.Text = dr("status")
+
+            cmd = New OdbcCommand("select * from koleksipribadi inner join buku on koleksipribadi.buku_id = buku.buku_id where user_id='" & dr("user_id") & "'", conn)
+            dr = cmd.ExecuteReader
+            menu_utama.ListBox1.Items.Clear()
+            Do While dr.Read
+                menu_utama.ListBox1.Items.Add(dr("buku_id") & Space(2) & dr("judul"))
+            Loop
+
+
+            If menu_utama.ToolStripStatusLabel1.Text = "admin" Then
+                'admin (Tidak Bisa Peminjaman/Pengembalian)
+                'home.GroupBox8.Visible = False
+
+            ElseIf menu_utama.ToolStripStatusLabel1.Text = "petugas" Then
+                'Petugas (Tidak Bisa Registrasi dan Peminjaman/Pengembalian)
+                menu_utama.Button1.Visible = False
+                menu_utama.Button6.Visible = False
+                menu_utama.GroupBox5.Width = 167
+
+            ElseIf menu_utama.ToolStripStatusLabel1.Text = "peminjam" Then
+                'Tidak Bisa Laporan
+                menu_utama.GroupBox7.Visible = False
+                menu_utama.GroupBox5.Visible = False
+
+                'Hapus TabPage
+                menu_utama.TabControl1.TabPages.Remove(menu_utama.TabControl1.TabPages(0))
+            End If
+            Call hapus()
+        End If
+    End Sub
+End Class
