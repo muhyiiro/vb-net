@@ -1,0 +1,151 @@
+Imports System.Data.Odbc
+Public Class user
+
+    Private Sub GroupBox2_Enter(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles GroupBox2.Enter
+
+    End Sub
+
+    Private Sub Button2_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button2.Click
+        ' if button1.text yang textnya "input" maka akan berubah menjadi button "simpan"
+        If Button2.Text = "INPUT" Then
+            Button2.Text = "SIMPAN"
+            ' lalu button2 dan button3 tidak aktif dan button4 kita ubah menjadi tulisan "batal"
+            Button4.Text = "BATAL"
+            ' lalu kita panggil FieldAktif() yang mana textbox1,textbox2,textbox3,textbox4 akan diaktifkan
+            Call FieldAktif()
+        Else
+            ' if textbox1, textbox2, textbox3 dan textbox3 kosong maka muncul alert pastikan semua field terisi
+            ' ini artinya disebut validasi
+            If TextBox1.Text = "" Or TextBox2.Text = "" Or TextBox3.Text = "" Or TextBox4.Text = "" Then
+                MsgBox("Pastikan semua field terisi")
+            Else
+                ' Jika semua form terisi, maka kita panggil Koneksi() ke database
+                Call koneksi()
+                ' lalu kita masukan data kita ke table mahasiswa (insert into mahasiswa .....)
+                Dim InputData As String = "Insert into user values('" & TextBox1.Text & "','" & TextBox2.Text & "','" & TextBox3.Text & "','" & ComboBox1.Text & "','" & TextBox4.Text & "','" & TextBox5.Text & "','" & TextBox6.Text & "')"
+                cmd = New OdbcCommand(InputData, conn)
+                cmd.ExecuteNonQuery()
+                ' lalu kita tampilkan message "input data berhasil"
+                MsgBox("Input data berhasil")
+                ' lalu kita kembalikan ke KondisiAwal()
+                Call KondisiAwal()
+            End If
+        End If
+    End Sub
+    Private Sub user_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
+        Call KondisiAwal()
+    End Sub
+    Sub KondisiAwal()
+        ' Textbox1, textbox2, textbox3, textbox4 kita kosongkan pertama kali
+        TextBox1.Text = ""
+        TextBox2.Text = ""
+        TextBox3.Text = ""
+        TextBox4.Text = ""
+        ' Textbox1 yang berarti form nim kita maksimalkan hanya bisa 15 huruf/angka
+        TextBox1.MaxLength = 15
+
+        ' Button1, Button2, Button3, Button4 kita tambahkan text masing - masing yaitu input, edit, hapus, tutup
+        Button2.Text = "INPUT"
+        Button3.Text = "EDIT"
+        Button4.Text = "HAPUS"
+        Button5.Text = "TUTUP"
+
+        ' Button1, Button2, Button3, Button4 kita aktifkan dengan menggunakan perintah true
+        Button2.Enabled = True
+        Button3.Enabled = True
+        Button4.Enabled = True
+        Button5.Enabled = True
+
+        ' Panggil koneksi yang sudah kita buat sub Koneksi()
+        Call Koneksi()
+
+        ' Memanggil table yang sudah kita buat yaitu mahasiswa
+        da = New OdbcDataAdapter("Select * From user", conn)
+        Ds = New DataSet
+        da.Fill(ds, "user")
+        DGV.DataSource = ds.Tables("user")
+    End Sub
+    Sub FieldAktif()
+        ' untuk mengaktifkan form
+        TextBox1.Enabled = True
+        TextBox2.Enabled = True
+        TextBox3.Enabled = True
+        TextBox4.Enabled = True
+        TextBox1.Focus()
+    End Sub
+End ClassImports System.Data.Odbc
+Public Class user
+
+    Private Sub GroupBox2_Enter(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles GroupBox2.Enter
+
+    End Sub
+
+    Private Sub Button2_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button2.Click
+        ' if button1.text yang textnya "input" maka akan berubah menjadi button "simpan"
+        If Button2.Text = "INPUT" Then
+            Button2.Text = "SIMPAN"
+            ' lalu button2 dan button3 tidak aktif dan button4 kita ubah menjadi tulisan "batal"
+            Button4.Text = "BATAL"
+            ' lalu kita panggil FieldAktif() yang mana textbox1,textbox2,textbox3,textbox4 akan diaktifkan
+            Call FieldAktif()
+        Else
+            ' if textbox1, textbox2, textbox3 dan textbox3 kosong maka muncul alert pastikan semua field terisi
+            ' ini artinya disebut validasi
+            If TextBox1.Text = "" Or TextBox2.Text = "" Or TextBox3.Text = "" Or TextBox4.Text = "" Then
+                MsgBox("Pastikan semua field terisi")
+            Else
+                ' Jika semua form terisi, maka kita panggil Koneksi() ke database
+                Call koneksi()
+                ' lalu kita masukan data kita ke table mahasiswa (insert into mahasiswa .....)
+                Dim InputData As String = "Insert into user values('" & TextBox1.Text & "','" & TextBox2.Text & "','" & TextBox3.Text & "','" & ComboBox1.Text & "','" & TextBox4.Text & "','" & TextBox5.Text & "','" & TextBox6.Text & "')"
+                cmd = New OdbcCommand(InputData, conn)
+                cmd.ExecuteNonQuery()
+                ' lalu kita tampilkan message "input data berhasil"
+                MsgBox("Input data berhasil")
+                ' lalu kita kembalikan ke KondisiAwal()
+                Call KondisiAwal()
+            End If
+        End If
+    End Sub
+    Private Sub user_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
+        Call KondisiAwal()
+    End Sub
+    Sub KondisiAwal()
+        ' Textbox1, textbox2, textbox3, textbox4 kita kosongkan pertama kali
+        TextBox1.Text = ""
+        TextBox2.Text = ""
+        TextBox3.Text = ""
+        TextBox4.Text = ""
+        ' Textbox1 yang berarti form nim kita maksimalkan hanya bisa 15 huruf/angka
+        TextBox1.MaxLength = 15
+
+        ' Button1, Button2, Button3, Button4 kita tambahkan text masing - masing yaitu input, edit, hapus, tutup
+        Button2.Text = "INPUT"
+        Button3.Text = "EDIT"
+        Button4.Text = "HAPUS"
+        Button5.Text = "TUTUP"
+
+        ' Button1, Button2, Button3, Button4 kita aktifkan dengan menggunakan perintah true
+        Button2.Enabled = True
+        Button3.Enabled = True
+        Button4.Enabled = True
+        Button5.Enabled = True
+
+        ' Panggil koneksi yang sudah kita buat sub Koneksi()
+        Call Koneksi()
+
+        ' Memanggil table yang sudah kita buat yaitu mahasiswa
+        da = New OdbcDataAdapter("Select * From user", conn)
+        Ds = New DataSet
+        da.Fill(ds, "user")
+        DGV.DataSource = ds.Tables("user")
+    End Sub
+    Sub FieldAktif()
+        ' untuk mengaktifkan form
+        TextBox1.Enabled = True
+        TextBox2.Enabled = True
+        TextBox3.Enabled = True
+        TextBox4.Enabled = True
+        TextBox1.Focus()
+    End Sub
+End Class
