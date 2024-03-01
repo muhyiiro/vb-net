@@ -1,0 +1,6 @@
+Private Sub btn_logout_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btn_logout.Click
+        If MessageBox.Show("apakah anda yakin ingin logout", "WARNING", MessageBoxButtons.YesNo) = Windows.Forms.DialogResult.Yes Then
+            Me.Close()
+            login.Show()
+        End If
+    End Sub
