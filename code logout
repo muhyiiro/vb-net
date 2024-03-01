@@ -4,3 +4,8 @@ Private Sub btn_logout_Click(ByVal sender As System.Object, ByVal e As System.Ev
             login.Show()
         End If
     End Sub
+Private Sub btn_exit_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btn_exit.Click
+        If MessageBox.Show("apakah anda yakin ingin keluar", "WARNING", MessageBoxButtons.YesNo) = Windows.Forms.DialogResult.Yes Then
+            End
+        End If
+    End Sub
